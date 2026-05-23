@@ -48,7 +48,7 @@ def get_intraday_summary():
 def fetch_kabutan_ranking(url, max_rows=10):
     try:
         res = requests.get(url, headers=HEADERS, timeout=15)
-        res.encoding = res.apparent_encoding
+        res.encoding = res.apparent_encoding if res.apparent_encoding else "utf-8"
         soup = BeautifulSoup(res.text, "html.parser")
         results = []
         table = soup.find("table", class_="stock_table")
