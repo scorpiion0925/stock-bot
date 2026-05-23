@@ -48,7 +48,7 @@ def get_intraday_summary():
 def fetch_kabutan_ranking(url, max_rows=10):
     try:
         res = requests.get(url, headers=HEADERS, timeout=15)
-        res.encoding = res.apparent_encoding if res.apparent_encoding else "utf-8"
+        res.encoding = "utf-8"
         soup = BeautifulSoup(res.text, "html.parser")
         results = []
         table = soup.find("table", class_="stock_table")
@@ -58,8 +58,9 @@ def fetch_kabutan_ranking(url, max_rows=10):
             cols = row.find_all("td")
             if len(cols) < 3:
                 continue
-            name = cols[1].get_text(strip=True)
-            change = cols[-2].get_text(strip=True) if len(cols) > 2 else ""
+            # 列構造: [0]コード [1]市場区分 [2]会社名 [3]株価 [4]変動率
+            name = cols[2].get_text(strip=True) if len(cols) > 2 else cols[1].get_text(strip=True)
+            change = cols[-2].get_text(strip=True) if len(cols) >= 5 else cols[-1].get_text(strip=True)
             results.append({"name": name, "change": change})
         return results
     except Exception as e:
