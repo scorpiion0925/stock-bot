@@ -16,7 +16,7 @@ PREMIUM_KEYWORDS = {
 def fetch_kabutan_news(url, max_items=30):
     try:
         res = requests.get(url, headers=HEADERS, timeout=15)
-       res.encoding = res.apparent_encoding if res.apparent_encoding else "utf-8"
+        res.encoding = "utf-8"
         soup = BeautifulSoup(res.text, "html.parser")
         items = []
         for li in soup.find_all(["li", "tr"])[:max_items * 2]:
