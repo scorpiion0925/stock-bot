@@ -24,7 +24,7 @@ def scrape_kabutan_golden_cross():
     url = "https://kabutan.jp/warning/?mode=6_1"
     try:
         res = requests.get(url, headers=HEADERS, timeout=15)
-        res.encoding = res.apparent_encoding
+        res.encoding = res.apparent_encoding if res.apparent_encoding else "utf-8"
         soup = BeautifulSoup(res.text, "html.parser")
         results = []
         table = soup.find("table", class_="stock_table")
